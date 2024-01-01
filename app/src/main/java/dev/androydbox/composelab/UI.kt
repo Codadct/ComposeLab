@@ -34,10 +34,13 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Send
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -146,19 +149,19 @@ fun CustomLayout(textStyle: TextStyle= LocalTextStyle.current) {
     //}
     //
     val Locdensity = LocalDensity.current
-    AnimatedVisibility(visible = true,
-
-        enter = slideInVertically {
-            // Slide in from 40 dp from the top.
-            with(Locdensity) { -100.dp.roundToPx() }
-        } + expandVertically(
-            // Expand from the top.
-            expandFrom = Alignment.Top
-        ) + fadeIn(
-            // Fade in with the initial alpha of 0.3f.
-            initialAlpha = 0.3f
-        ),
-        exit = slideOutVertically() + shrinkVertically() + fadeOut()) {
+//    AnimatedVisibility(visible = true,
+//
+//        enter = slideInVertically {
+//            // Slide in from 40 dp from the top.
+//            with(Locdensity) { -100.dp.roundToPx() }
+//        } + expandVertically(
+//            // Expand from the top.
+//            expandFrom = Alignment.Top
+//        ) + fadeIn(
+//            // Fade in with the initial alpha of 0.3f.
+//            initialAlpha = 0.3f
+//        ),
+//        exit = slideOutVertically() + shrinkVertically() + fadeOut()) {
 
 
         Column(
@@ -219,6 +222,15 @@ fun CustomLayout(textStyle: TextStyle= LocalTextStyle.current) {
                     dampingRatio = 5f
                 )
             )
+            ModalNavigationDrawer(drawerContent = {
+                ModalDrawerSheet {
+                        Text("Menu")
+                        Divider()
+
+                }
+            }) {
+
+            }
             Layout(content = {
                 Column(
                     modifier = Modifier
@@ -302,13 +314,15 @@ fun CustomLayout(textStyle: TextStyle= LocalTextStyle.current) {
 
                 IconButton(onClick = { /*TODO*/
                     MessageList.add(textFieldValue.text)
-                    textFieldValue = TextFieldValue(text = "")
+                    var TextString:String=textFieldValue.text
+                    Log.e("promp as entered",TextString)
+
                     GlobalScope.launch {
 
-                        MessageList.add(generateText(""))
+                        MessageList.add(generateText(TextString))
 
                     }
-
+                    textFieldValue = TextFieldValue(text = "")
 
                 }, modifier = Modifier.layoutId("SendButton")) {
                     Icon(imageVector = Icons.Rounded.Send, "Send")
@@ -389,12 +403,12 @@ fun CustomLayout(textStyle: TextStyle= LocalTextStyle.current) {
                 })
         }
     }
-}
+
 
     suspend fun generateText(prompt: String): String {
-        val apiKey = "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"
+        val apiKey = "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"
         //val prompt = "Translate the following English text to French: 'Hello, world!'"
-
+    Log.e("Prompt inside generate text", prompt)
         val openAIApiClient = OpenAIAPIClient(apiKey)
         var generatedText =""
         runBlocking {
